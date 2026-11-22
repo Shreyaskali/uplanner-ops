@@ -71,6 +71,8 @@ func main() {
 		err = runVersion(jsonOut)
 	case "profile":
 		err = runProfile(cfg, subArgs, jsonOut)
+	case "fit":
+		err = runFit(cfg, subArgs, jsonOut)
 	case "content":
 		err = runContent(root, jsonOut)
 	case "tui":
@@ -126,12 +128,19 @@ Usage:
   uplanner version [--json]      print version
   uplanner content [--json]      show generated content counts
   uplanner profile [flags]       set structured profile fields
+  uplanner fit [flags]           score a job description against your profile
   uplanner tui                   open the Bubble Tea interface
   uplanner help
 
 Profile flags:
   --degree --field --institution --grade --years --role --company
   --skills --exam --quant --verbal --language
+
+Fit flags:
+  --text TEXT        job description text
+  --text-file PATH   read the job description from a file
+  --save             write a report (gated; needs --confirm)
+  --confirm          confirm a gated write
 
 Global flags:
   --data-dir DIR   override the user data root

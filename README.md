@@ -5,9 +5,9 @@ hiring research of **uplanner** with the free learning resources of
 **Intersections**, using the agent architecture of
 [career-ops](https://github.com/career-ops-hq/career-ops).
 
-**Status: Phase 1 foundation.** Data generation, setup doctor, structured
-profile and the Bubble Tea shell are working. Scoring, learning and tracking
-modes land in later phases.
+**Status: Phase 2.** Data generation, setup doctor, structured profile, the
+Bubble Tea shell and the deterministic fit engine are working. Learning,
+degree planning and tracking modes land in later phases.
 
 ## Principles
 
@@ -47,7 +47,9 @@ This produces `content/uplanner.json` with:
 ./uplanner doctor --json       # setup report
 ./uplanner content             # generated data counts
 ./uplanner profile --field "Computer Science" --years 3 --skills "SQL, AWS"
-./uplanner tui                 # Bubble Tea interface
+./uplanner fit --text-file job.md          # score a JD against your profile
+./uplanner fit --text-file job.md --save --confirm   # save a gated report
+./uplanner tui                             # Bubble Tea interface
 ```
 
 Set `UPLANNER_DATA_DIR` to keep your data outside the install directory. An
@@ -66,6 +68,8 @@ cmd/uplanner       CLI + Bubble Tea TUI
 internal/data      generated content contract
 internal/config    data-root resolution
 internal/doctor    setup validation
+internal/profile   structured profile loader
+internal/core/fit  deterministic JD fit engine (Go port of compass-core.js)
 content/           generated, never hand-edited
 ```
 
@@ -77,8 +81,9 @@ go test ./...
 
 ## Roadmap
 
-1. **Foundation** (this) — contract, generator, doctor, profile, TUI shell.
-2. **Gap engine** — Go ports of fit/gaps/path with golden parity tests.
+1. **Foundation** — contract, generator, doctor, profile, TUI shell. ✓
+2. **Gap engine** — deterministic fit engine with profile-driven checks. ✓
+   Remaining: `gaps`, `market`, `path`, plus Go↔JS parity fixtures.
 3. **Learning** — free resource planning, progress, exam plans.
 4. **Degree & execution** — compare, cost, deadlines, tracking, export, weekly plan.
 5. **Hardening** — BYOK outbound gate, multi-CLI wrappers, self-update.
