@@ -1,0 +1,15 @@
+# Code and local state
+/uplanner
+/dist
+*.test
+coverage.out
+
+# Secrets — never commit
+.env
+
+# User data root when kept inside the repo
+/.data
+.uplanner-data
+
+# Editor noise
+.DS_Store
