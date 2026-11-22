@@ -73,6 +73,14 @@ func main() {
 		err = runProfile(cfg, subArgs, jsonOut)
 	case "fit":
 		err = runFit(cfg, subArgs, jsonOut)
+	case "resources":
+		err = runResources(root, cfg, subArgs, jsonOut)
+	case "learn-paths":
+		err = runLearnPaths(root, cfg, subArgs, jsonOut)
+	case "plan-learning":
+		err = runPlanLearning(root, cfg, subArgs, jsonOut)
+	case "progress":
+		err = runProgress(cfg, subArgs, jsonOut)
 	case "content":
 		err = runContent(root, jsonOut)
 	case "tui":
@@ -129,6 +137,10 @@ Usage:
   uplanner content [--json]      show generated content counts
   uplanner profile [flags]       set structured profile fields
   uplanner fit [flags]           score a job description against your profile
+  uplanner resources [flags]     find free learning resources by domain
+  uplanner learn-paths [flags]   find learning paths by domain
+  uplanner plan-learning [flags] build a free learning plan from a gap
+  uplanner progress [flags]      show or mark completed resources
   uplanner tui                   open the Bubble Tea interface
   uplanner help
 
@@ -141,6 +153,12 @@ Fit flags:
   --text-file PATH   read the job description from a file
   --save             write a report (gated; needs --confirm)
   --confirm          confirm a gated write
+
+Learning flags:
+  --domain LIST      comma-separated domains (ai, data, finance, cloud, lead…)
+  --gap TEXT         describe a gap for plan-learning
+  --limit N          maximum resources
+  --done ID          mark a resource done in progress (gated)
 
 Global flags:
   --data-dir DIR   override the user data root

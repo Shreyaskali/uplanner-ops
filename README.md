@@ -5,9 +5,9 @@ hiring research of **uplanner** with the free learning resources of
 **Intersections**, using the agent architecture of
 [career-ops](https://github.com/career-ops-hq/career-ops).
 
-**Status: Phase 2.** Data generation, setup doctor, structured profile, the
-Bubble Tea shell and the deterministic fit engine are working. Learning,
-degree planning and tracking modes land in later phases.
+**Status: Phase 3.** Data generation, setup doctor, structured profile, the
+Bubble Tea shell, the deterministic fit engine and the free learning engine
+are working. Degree planning and tracking modes land in Phase 4.
 
 ## Principles
 
@@ -49,6 +49,9 @@ This produces `content/uplanner.json` with:
 ./uplanner profile --field "Computer Science" --years 3 --skills "SQL, AWS"
 ./uplanner fit --text-file job.md          # score a JD against your profile
 ./uplanner fit --text-file job.md --save --confirm   # save a gated report
+./uplanner resources --domain ai,data      # free learning resources
+./uplanner plan-learning --gap "SQL"       # a small free study plan
+./uplanner progress --done <id> --confirm  # mark a resource done
 ./uplanner tui                             # Bubble Tea interface
 ```
 
@@ -70,6 +73,7 @@ internal/config    data-root resolution
 internal/doctor    setup validation
 internal/profile   structured profile loader
 internal/core/fit  deterministic JD fit engine (Go port of compass-core.js)
+internal/core/learn free-resource selector and gap→domain mapping
 content/           generated, never hand-edited
 ```
 
@@ -84,6 +88,7 @@ go test ./...
 1. **Foundation** — contract, generator, doctor, profile, TUI shell. ✓
 2. **Gap engine** — deterministic fit engine with profile-driven checks. ✓
    Remaining: `gaps`, `market`, `path`, plus Go↔JS parity fixtures.
-3. **Learning** — free resource planning, progress, exam plans.
+3. **Learning** — free resource planning, paths and progress. ✓
+   Remaining: `cert` exam plans.
 4. **Degree & execution** — compare, cost, deadlines, tracking, export, weekly plan.
 5. **Hardening** — BYOK outbound gate, multi-CLI wrappers, self-update.
