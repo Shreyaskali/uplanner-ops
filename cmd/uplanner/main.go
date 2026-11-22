@@ -93,6 +93,16 @@ func main() {
 		err = runTrack(cfg, subArgs, jsonOut)
 	case "export":
 		err = runExport(cfg, subArgs, jsonOut)
+	case "gaps":
+		err = runGaps(cfg, subArgs, jsonOut)
+	case "market":
+		err = runMarket(root, subArgs, jsonOut)
+	case "path":
+		err = runPath(root, cfg, subArgs, jsonOut)
+	case "cert":
+		err = runCert(subArgs, jsonOut)
+	case "plan":
+		err = runPlan(root, cfg, subArgs, jsonOut)
 	case "content":
 		err = runContent(root, jsonOut)
 	case "tui":
@@ -159,6 +169,11 @@ Usage:
   uplanner deadlines [flags]     upcoming application deadlines
   uplanner track [flags]         show or update application status
   uplanner export [flags]        export the tracker as markdown
+  uplanner gaps [flags]           recurring gaps across saved fit reports
+  uplanner market [flags]         what roles actually involve
+  uplanner path [flags]           roles aligned with your recorded profile
+  uplanner cert [flags]           exam plans with relative prep phases
+  uplanner plan [flags]           capacity-aware weekly plan
   uplanner tui                   open the Bubble Tea interface
   uplanner help
 

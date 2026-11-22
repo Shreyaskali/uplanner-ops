@@ -5,10 +5,11 @@ hiring research of **uplanner** with the free learning resources of
 **Intersections**, using the agent architecture of
 [career-ops](https://github.com/career-ops-hq/career-ops).
 
-**Status: Phase 4.** Data generation, setup doctor, structured profile, the
-Bubble Tea shell, deterministic fit and learning engines, and degree planning
-with tracking and export are working. Remaining: `gaps`, `market`, `path`,
-`cert`, the weekly `plan` and the BYOK outbound gate.
+**Status: Phase 5 — feature-complete foundation.** All planned modes work
+locally: profile, fit, gaps, market, path, free learning, cert, degree
+planning, deadlines, tracking, export and a weekly plan. The single outbound
+boundary has a fail-closed PII gate. Remaining polish: Go↔JS parity fixtures,
+multi-CLI install wrappers and self-update.
 
 ## Principles
 
@@ -82,6 +83,7 @@ internal/core/fit  deterministic JD fit engine (Go port of compass-core.js)
 internal/core/learn free-resource selector and gap→domain mapping
 internal/core/degree program ranking and side-by-side comparison
 internal/tracker    canonical applications.md with atomic writes
+internal/outbound   single network boundary with a fail-closed PII gate
 content/           generated, never hand-edited
 ```
 
@@ -100,4 +102,5 @@ go test ./...
    Remaining: `cert` exam plans.
 4. **Degree & execution** — degree-plan, compare, cost, deadlines, track, export. ✓
    Remaining: weekly `plan`.
-5. **Hardening** — BYOK outbound gate, multi-CLI wrappers, self-update.
+5. **Hardening** — gaps/market/path/cert/plan, BYOK gate. ✓
+   Remaining: Go↔JS parity fixtures, multi-CLI wrappers, self-update.

@@ -25,8 +25,8 @@ var domainAliases = map[string][]string{
 func GapDomains(gap string) []string {
 	lower := strings.ToLower(gap)
 	keywords := map[string][]string{
-		"ai":      {"ai", "machine learning", "llm", "model", "deep learning", "mlops"},
-		"data":    {"sql", "data", "analytics", "dashboard", "statistics", "python", "etl"},
+		"ai":      {"ai", "machine learning", "llm", "model", "deep learning", "mlops", "computer science", "computer"},
+		"data":    {"sql", "data", "analytics", "dashboard", "statistics", "python", "etl", "computer science", "computing"},
 		"finance": {"finance", "valuation", "investment", "markets", "risk", "accounting"},
 		"wm":      {"wealth", "portfolio", "advisory", "client"},
 		"cloud":   {"cloud", "aws", "azure", "gcp", "infrastructure", "devops", "kubernetes"},

@@ -43,6 +43,10 @@ user files. Data root precedence: `UPLANNER_DATA_DIR`, then the path in
 | "what's due", "deadlines" | `deadlines` |
 | "application status", "my tracker" | `track` |
 | "export my plan" | `export` |
+| "recurring gaps", "why am I getting rejected" | `gaps` |
+| "what does this role involve" | `market` |
+| "which roles fit me" | `path` |
+| "exam plan", "CAT/GRE planning" | `cert` |
 | "weekly plan", "this week's priorities" | `plan` |
 | "remember this rule", "next time do X" | `retro` |
 
