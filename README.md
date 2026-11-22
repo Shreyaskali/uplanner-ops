@@ -5,9 +5,10 @@ hiring research of **uplanner** with the free learning resources of
 **Intersections**, using the agent architecture of
 [career-ops](https://github.com/career-ops-hq/career-ops).
 
-**Status: Phase 3.** Data generation, setup doctor, structured profile, the
-Bubble Tea shell, the deterministic fit engine and the free learning engine
-are working. Degree planning and tracking modes land in Phase 4.
+**Status: Phase 4.** Data generation, setup doctor, structured profile, the
+Bubble Tea shell, deterministic fit and learning engines, and degree planning
+with tracking and export are working. Remaining: `gaps`, `market`, `path`,
+`cert`, the weekly `plan` and the BYOK outbound gate.
 
 ## Principles
 
@@ -52,6 +53,11 @@ This produces `content/uplanner.json` with:
 ./uplanner resources --domain ai,data      # free learning resources
 ./uplanner plan-learning --gap "SQL"       # a small free study plan
 ./uplanner progress --done <id> --confirm  # mark a resource done
+./uplanner degree-plan --country India     # rank programs by evidence
+./uplanner compare <id-a> <id-b>           # side-by-side comparison
+./uplanner deadlines                       # upcoming application dates
+./uplanner track --id <id> --status preparing --confirm
+./uplanner export --out plan.md            # markdown application plan
 ./uplanner tui                             # Bubble Tea interface
 ```
 
@@ -74,6 +80,8 @@ internal/doctor    setup validation
 internal/profile   structured profile loader
 internal/core/fit  deterministic JD fit engine (Go port of compass-core.js)
 internal/core/learn free-resource selector and gap→domain mapping
+internal/core/degree program ranking and side-by-side comparison
+internal/tracker    canonical applications.md with atomic writes
 content/           generated, never hand-edited
 ```
 
@@ -90,5 +98,6 @@ go test ./...
    Remaining: `gaps`, `market`, `path`, plus Go↔JS parity fixtures.
 3. **Learning** — free resource planning, paths and progress. ✓
    Remaining: `cert` exam plans.
-4. **Degree & execution** — compare, cost, deadlines, tracking, export, weekly plan.
+4. **Degree & execution** — degree-plan, compare, cost, deadlines, track, export. ✓
+   Remaining: weekly `plan`.
 5. **Hardening** — BYOK outbound gate, multi-CLI wrappers, self-update.

@@ -81,6 +81,18 @@ func main() {
 		err = runPlanLearning(root, cfg, subArgs, jsonOut)
 	case "progress":
 		err = runProgress(cfg, subArgs, jsonOut)
+	case "degree-plan":
+		err = runDegreePlan(root, subArgs, jsonOut)
+	case "compare":
+		err = runCompare(root, subArgs, jsonOut)
+	case "cost":
+		err = runCost(subArgs, jsonOut)
+	case "deadlines":
+		err = runDeadlines(root, cfg, subArgs, jsonOut)
+	case "track":
+		err = runTrack(cfg, subArgs, jsonOut)
+	case "export":
+		err = runExport(cfg, subArgs, jsonOut)
 	case "content":
 		err = runContent(root, jsonOut)
 	case "tui":
@@ -141,6 +153,12 @@ Usage:
   uplanner learn-paths [flags]   find learning paths by domain
   uplanner plan-learning [flags] build a free learning plan from a gap
   uplanner progress [flags]      show or mark completed resources
+  uplanner degree-plan [flags]   rank programs by evidence and priority
+  uplanner compare ID ID         compare two programs side by side
+  uplanner cost [flags]          forgone-pay and tuition model
+  uplanner deadlines [flags]     upcoming application deadlines
+  uplanner track [flags]         show or update application status
+  uplanner export [flags]        export the tracker as markdown
   uplanner tui                   open the Bubble Tea interface
   uplanner help
 
