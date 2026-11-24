@@ -23,44 +23,44 @@ type dimension struct {
 
 var dimensions = []dimension{
 	{"analytics", "Data & analytics", "AI / analytics", 72,
-		[]string{"Data analyst", "Business analyst", "Analytics manager"},
-		"Analytical coursework supports metric-driven work.",
+		[]string{"Data analyst", "Business analyst", "Analytics manager", "Product analyst"},
+		"Your degree and analytical coursework support metric-driven, reporting and dashboard work.",
 		[]string{"analytics", "analytical", "data", "data analysis", "data-driven", "sql", "python", "pandas", "excel", "dashboard", "dashboards", "metrics", "kpi", "kpis", "reporting", "forecasting", "statistics", "statistical", "segmentation", "tableau", "power bi", "bigquery", "etl", "data pipeline"}},
 	{"ai", "AI & machine learning", "AI / analytics", 70,
-		[]string{"AI product analyst", "Applied AI associate", "Data scientist"},
-		"Quantitative preparation is a relevant foundation for AI work.",
-		[]string{"artificial intelligence", "machine learning", "deep learning", "generative ai", "llm", "nlp", "model deployment", "mlops", "prompt engineering", "ai governance", "ai observability", "model monitoring"}},
+		[]string{"AI product analyst", "Applied AI associate", "Data scientist", "AI governance analyst"},
+		"Quantitative preparation and any modeling coursework are relevant foundations for AI work.",
+		[]string{"artificial intelligence", "machine learning", "deep learning", "generative ai", "genai", "llm", "llms", "nlp", "computer vision", "model deployment", "mlops", "prompt engineering", "ai governance", "ai observability", "model monitoring", "ai"}},
 	{"finance", "Finance & markets", "Finance / quant", 70,
-		[]string{"Finance analyst", "Risk analyst", "Fintech strategy associate"},
-		"Quantitative training suits finance and markets roles.",
+		[]string{"Finance analyst", "Strategy and finance associate", "Risk analyst", "Fintech strategy associate"},
+		"Quantitative background and analytical rigor suit finance and markets roles.",
 		[]string{"finance", "financial", "financial modeling", "valuation", "dcf", "investment banking", "m&a", "equity research", "portfolio management", "asset management", "wealth management", "private equity", "venture capital", "trading", "risk management", "credit risk", "treasury", "fp&a", "accounting", "audit", "fintech", "payments", "lending", "banking", "capital markets"}},
 	{"consulting", "Strategy & consulting", "MBA / management", 70,
-		[]string{"Strategy analyst", "Consultant", "Corporate strategy associate"},
-		"Structured problem-solving suits strategy work.",
+		[]string{"Strategy analyst", "Consultant", "Business transformation associate", "Corporate strategy associate"},
+		"Structured problem-solving and communication suit strategy and consulting work.",
 		[]string{"consulting", "consultant", "strategy", "strategic", "client engagement", "client-facing", "stakeholder management", "due diligence", "market entry", "operating model", "business case", "problem solving", "recommendations", "transformation", "change management"}},
 	{"technology", "Cloud & technology", "Technology / product", 74,
-		[]string{"Cloud strategy analyst", "Platform strategy associate", "Technology consultant"},
-		"Technical coursework suits product and platform roles.",
+		[]string{"Cloud strategy analyst", "Platform strategy associate", "Technology consultant", "Solutions analyst"},
+		"Technical coursework and any engineering background suit product, platform and technology roles.",
 		[]string{"software", "software engineering", "cloud", "aws", "azure", "gcp", "google cloud", "kubernetes", "docker", "devops", "platform", "architecture", "api", "apis", "microservices", "observability", "monitoring", "infrastructure", "saas", "security", "data engineering", "site reliability", "terraform", "java", "javascript", "golang"}},
 	{"product", "Product & growth", "Technology / product", 70,
-		[]string{"Product analyst", "Associate product manager", "Growth analyst"},
-		"Product thinking suits product and growth roles.",
+		[]string{"Product analyst", "Associate product manager", "Product strategy associate", "Growth analyst"},
+		"Product thinking and any build or launch experience suit product and growth roles.",
 		[]string{"product manager", "product management", "product owner", "roadmap", "product strategy", "user research", "customer discovery", "go-to-market", "gtm", "feature", "features", "agile", "scrum", "backlog", "ux", "product analytics", "a/b testing", "launch"}},
 	{"operations", "Operations & supply chain", "Supply chain / operations", 70,
-		[]string{"Operations analyst", "Supply chain analyst", "Process improvement analyst"},
-		"Engineering and systems thinking suit operations roles.",
+		[]string{"Operations analyst", "Supply chain analyst", "Process improvement analyst", "Planning associate"},
+		"Engineering and systems thinking suit operations, logistics and supply chain roles.",
 		[]string{"operations", "operational", "supply chain", "logistics", "procurement", "inventory", "manufacturing", "production", "process improvement", "lean", "six sigma", "quality", "warehouse", "planning", "s&op", "capacity planning"}},
 	{"economics", "Economics & policy", "Economics", 68,
-		[]string{"Economic analyst", "Policy analyst", "Pricing analyst"},
+		[]string{"Economic analyst", "Policy analyst", "Pricing analyst", "Research associate"},
 		"Quantitative training supports economics and policy analysis.",
 		[]string{"economics", "economic", "microeconomics", "macroeconomics", "econometrics", "pricing", "market design", "public policy", "policy analysis", "regulation", "cost-benefit"}},
 	{"management", "Management & leadership", "MBA / management", 66,
-		[]string{"Management associate", "Strategy manager", "Operations manager"},
-		"Leadership or ownership experience is relevant to management roles.",
+		[]string{"Management associate", "Strategy manager", "Operations manager", "General management associate"},
+		"Any leadership or ownership experience is relevant to general management and people-management roles.",
 		[]string{"people management", "team management", "line management", "direct reports", "p&l", "profit and loss", "budget ownership", "general management", "leadership", "lead a team", "manage a team", "hiring", "performance management"}},
 	{"entrepreneurship", "Founding & venture", "MBA / management", 66,
-		[]string{"Founder", "Venture analyst", "New ventures associate"},
-		"Any 0-to-1 build or ownership experience suits founding roles.",
+		[]string{"Founder", "Venture analyst", "New ventures associate", "Chief of staff"},
+		"Any 0→1 build or ownership experience suits founding, venture and new-venture roles.",
 		[]string{"founder", "founding", "startup", "start-up", "zero to one", "venture", "fundraising", "bootstrapped", "entrepreneur", "ownership", "build from scratch"}},
 }
 
@@ -131,13 +131,17 @@ func norm(s string) string {
 	return strings.Join(strings.Fields(s), " ")
 }
 
+// countTerm mirrors compass-core.js: word-boundary matching for plain
+// alphanumeric terms, substring counting for anything containing punctuation.
 func countTerm(text, term string) int {
 	needle := norm(term)
 	if needle == "" {
 		return 0
 	}
-	if strings.ContainsAny(needle, " &/-+") {
-		return strings.Count(norm(text), needle)
+	for _, r := range needle {
+		if (r < 'a' || r > 'z') && (r < '0' || r > '9') {
+			return strings.Count(norm(text), needle)
+		}
 	}
 	re := regexp.MustCompile(`\b` + regexp.QuoteMeta(needle) + `\b`)
 	return len(re.FindAllString(norm(text), -1))
@@ -148,11 +152,17 @@ func fieldGroups(p profile.Profile) map[string]bool {
 	groups := map[string]bool{}
 	haystack := norm(p.Field + " " + p.Skills)
 	for _, signal := range fieldSignals {
+		matched := false
 		for _, term := range signal.terms {
-			if reWord(term).MatchString(haystack) {
+			// JS uses substring matching here and stops at the FIRST group.
+			if strings.Contains(haystack, term) {
 				groups[signal.group] = true
+				matched = true
 				break
 			}
+		}
+		if matched {
+			break
 		}
 	}
 	return groups
@@ -183,7 +193,7 @@ func clamp(v, lo, hi int) int {
 }
 
 type demandScore struct {
-	raw       int
+	raw       float64
 	intensity float64
 	fit       int
 }
@@ -204,24 +214,31 @@ func Analyse(text string, p profile.Profile) Analysis {
 
 	demand := map[string]*demandScore{}
 	matchedSet := map[string]bool{}
-	maxRaw := 0
+	matchedOrder := []string{}
+	maxRaw := 0.0
 	for _, d := range dimensions {
-		raw := 0
+		raw := 0.0
 		for _, keyword := range d.Keywords {
 			n := countTerm(source, keyword)
 			if n == 0 {
 				continue
 			}
-			weight := 1
+			// JS compass-core.js: multi-word or punctuated keywords carry 1.4,
+			// a keyword in the first 220 characters gets a 1.6 head bonus.
+			weight := 1.0
 			if strings.Contains(keyword, " ") || strings.ContainsAny(keyword, "&/-+") {
-				weight = 2
+				weight = 1.4
 			}
-			add := min(n, 3) * weight
-			if strings.Contains(head, keyword) {
-				add += 2
+			raw += float64(min(n, 3)) * weight
+			// JS uses containsTerm (word boundary), not substring: "platform"
+			// inside "platforms" does not earn the head bonus.
+			if countTerm(head, keyword) > 0 {
+				raw += 1.6
 			}
-			raw += add
-			matchedSet[keyword] = true
+			if !matchedSet[keyword] {
+				matchedSet[keyword] = true
+				matchedOrder = append(matchedOrder, keyword)
+			}
 		}
 		demand[d.ID] = &demandScore{raw: raw}
 		if raw > maxRaw {
@@ -230,21 +247,15 @@ func Analyse(text string, p profile.Profile) Analysis {
 	}
 
 	groups := fieldGroups(p)
-	matched := make([]string, 0, len(matchedSet))
-	for k := range matchedSet {
-		matched = append(matched, k)
-	}
-	sort.Strings(matched)
+	matched := matchedOrder
 
 	if maxRaw > 0 {
 		for _, d := range dimensions {
 			ds := demand[d.ID]
-			ds.intensity = float64(ds.raw) / float64(maxRaw)
-			align := 0
-			if groups[d.Group] {
-				align = 8
-			}
-			ds.fit = clamp(floatToInt(float64(d.Strength+align)*(0.6+0.4*ds.intensity)), 5, 97)
+			ds.intensity = ds.raw / maxRaw
+			// The displayed fit is strength-only in JS; the field-alignment
+			// bonus affects strength sorting and the score base, not this field.
+			ds.fit = clamp(floatToInt(float64(d.Strength)*(0.6+0.4*ds.intensity)), 5, 97)
 		}
 	} else {
 		for _, d := range dimensions {
@@ -261,7 +272,7 @@ func Analyse(text string, p profile.Profile) Analysis {
 
 	base := 50.0
 	if maxRaw > 0 {
-		total := 0
+		total := 0.0
 		weighted := 0.0
 		for _, d := range dimensions {
 			ds := demand[d.ID]
@@ -270,10 +281,10 @@ func Analyse(text string, p profile.Profile) Analysis {
 			if groups[d.Group] {
 				align = 8
 			}
-			weighted += float64(ds.raw * (d.Strength + align))
+			weighted += ds.raw * float64(d.Strength+align)
 		}
 		if total > 0 {
-			base = weighted / float64(total)
+			base = weighted / total
 		}
 	}
 	score := clamp(floatToInt(base)+adjustment, 5, 97)
@@ -299,6 +310,23 @@ func Analyse(text string, p profile.Profile) Analysis {
 		return ranked[i].Label < ranked[j].Label
 	})
 
+	// Strengths use the field-aligned score, matching JS's (fit + align) * intensity.
+	aligned := make([]dimension, len(ranked))
+	copy(aligned, ranked)
+	sort.SliceStable(aligned, func(i, j int) bool {
+		ai, aj := aligned[i], aligned[j]
+		bi, bj := demand[ai.ID], demand[aj.ID]
+		vi := float64(bi.fit+alignOf(ai, groups)) * bi.intensity
+		vj := float64(bj.fit+alignOf(aj, groups)) * bj.intensity
+		if vi != vj {
+			return vi > vj
+		}
+		if bi.fit != bj.fit {
+			return bi.fit > bj.fit
+		}
+		return ai.Label < aj.Label
+	})
+
 	dims := []Dimension{}
 	strengths := []Dimension{}
 	for _, d := range ranked {
@@ -318,11 +346,20 @@ func Analyse(text string, p profile.Profile) Analysis {
 			Terms: first(terms, 6),
 		}
 		dims = append(dims, item)
-		if len(strengths) < 3 {
-			strengths = append(strengths, item)
-		}
 	}
 	dims = first(dims, 3)
+	for _, d := range aligned {
+		if demand[d.ID].raw == 0 {
+			continue
+		}
+		strengths = append(strengths, Dimension{
+			ID: d.ID, Label: d.Label, Group: d.Group, Fit: demand[d.ID].fit,
+			Evidence: evidenceFor(d, p, groups), Roles: d.Roles,
+		})
+		if len(strengths) == 3 {
+			break
+		}
+	}
 
 	gaps := []Gap{}
 	for _, c := range checks {
@@ -372,13 +409,27 @@ func Analyse(text string, p profile.Profile) Analysis {
 	}
 }
 
+func alignOf(d dimension, groups map[string]bool) int {
+	if groups[d.Group] {
+		return 8
+	}
+	return 0
+}
+
 func evidenceFor(d dimension, p profile.Profile, groups map[string]bool) string {
 	if !groups[d.Group] || p.Field == "" {
 		return d.Evidence
 	}
 	lead := "Your " + p.Field + " training"
+	parts := []string{}
 	if p.Role != "" {
-		lead += " and work as " + p.Role
+		parts = append(parts, p.Role)
+	}
+	if p.Company != "" {
+		parts = append(parts, p.Company)
+	}
+	if len(parts) > 0 {
+		lead += " and work as " + strings.Join(parts, " at ")
 	}
 	return lead + " support this area. " + d.Evidence
 }

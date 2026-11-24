@@ -1,0 +1,17 @@
+{
+  "name": "cloud-analyst",
+  "profile": {
+    "degreeLevel": "Bachelor's",
+    "field": "Computer Science",
+    "institution": "Example University",
+    "grade": "8.5",
+    "years": 3,
+    "role": "Cloud strategy analyst",
+    "company": "Bank",
+    "skills": "SQL, dashboards, AWS",
+    "exam": "GRE",
+    "quantScore": 168,
+    "verbalScore": 150
+  },
+  "jd": "Cloud Strategy Analyst — Financial Services\n\nYou will join a small strategy team supporting cloud and data platforms.\n\nResponsibilities\n• Analyse cloud spend and usage data with SQL and Excel; build dashboards and KPIs for engineering and finance leaders.\n• Translate metrics into recommendations for senior stakeholders and partner with product, platform and risk teams.\n• Support AI governance, model observability and cloud cost controls.\n\nRequirements\n• 1–3 years in consulting, banking technology or product.\n• Bachelor's degree; master's preferred, not required.\n• Strong SQL and Excel; exposure to AWS, Azure or GCP.\n• Clear written communication and comfort with ambiguity."
+}

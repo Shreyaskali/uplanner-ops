@@ -5,11 +5,12 @@ hiring research of **uplanner** with the free learning resources of
 **Intersections**, using the agent architecture of
 [career-ops](https://github.com/career-ops-hq/career-ops).
 
-**Status: Phase 5 — feature-complete foundation.** All planned modes work
-locally: profile, fit, gaps, market, path, free learning, cert, degree
-planning, deadlines, tracking, export and a weekly plan. The single outbound
-boundary has a fail-closed PII gate. Remaining polish: Go↔JS parity fixtures,
-multi-CLI install wrappers and self-update.
+**Status: complete.** All planned modes work locally: profile, fit, gaps,
+market, path, free learning, cert, degree planning, deadlines, tracking,
+export and a weekly plan. The single outbound boundary has a fail-closed PII
+gate. The Go fit engine is byte-for-byte equivalent to the web tool's
+`compass-core.js` across the parity fixtures. Multi-CLI wrappers and a
+system-layer-only self-update are included.
 
 ## Principles
 
@@ -87,11 +88,27 @@ internal/outbound   single network boundary with a fail-closed PII gate
 content/           generated, never hand-edited
 ```
 
-## Tests
+## Tests and parity
 
 ```bash
 go test ./...
+./scripts/check-parity.sh "/path/to/University Planner"
 ```
+
+The parity script runs four fixtures through both the Go engine
+(`cmd/parity-go`) and the web tool's `compass-core.js`
+(`parity/js-engine.mjs`) and compares the parsed results. Score, band,
+confidence, dimensions, requirement statuses and matched keywords must match.
+
+## Self-update
+
+```bash
+uplanner update --source /path/to/uplanner-ops --json   # plan only
+uplanner update --source /path/to/uplanner-ops --apply   # apply
+```
+
+Only files in `internal/update.SystemPaths` may be replaced. User data and
+secrets are never touched; local edits are preserved as `.bak` and skipped.
 
 ## Roadmap
 
@@ -102,5 +119,5 @@ go test ./...
    Remaining: `cert` exam plans.
 4. **Degree & execution** — degree-plan, compare, cost, deadlines, track, export. ✓
    Remaining: weekly `plan`.
-5. **Hardening** — gaps/market/path/cert/plan, BYOK gate. ✓
-   Remaining: Go↔JS parity fixtures, multi-CLI wrappers, self-update.
+5. **Hardening** — gaps/market/path/cert/plan, BYOK gate, Go↔JS parity,
+   multi-CLI wrappers, system-layer-only self-update. ✓

@@ -103,6 +103,8 @@ func main() {
 		err = runCert(subArgs, jsonOut)
 	case "plan":
 		err = runPlan(root, cfg, subArgs, jsonOut)
+	case "update":
+		err = runUpdate(root, subArgs, jsonOut)
 	case "content":
 		err = runContent(root, jsonOut)
 	case "tui":
@@ -175,6 +177,7 @@ Usage:
   uplanner cert [flags]           exam plans with relative prep phases
   uplanner plan [flags]           capacity-aware weekly plan
   uplanner tui                   open the Bubble Tea interface
+  uplanner update --source DIR   plan or apply a system-layer update
   uplanner help
 
 Profile flags:

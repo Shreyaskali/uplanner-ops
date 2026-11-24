@@ -1,0 +1,12 @@
+{
+  "name": "ml-engineer",
+  "profile": {
+    "degreeLevel": "Bachelor's",
+    "field": "Computer Science and Engineering",
+    "years": 2,
+    "role": "Software engineer",
+    "company": "Technology startup",
+    "skills": "Python, SQL, model deployment, MLflow"
+  },
+  "jd": "Machine Learning Engineer\n\nYou will build and deploy machine learning models in Python, using SQL for feature pipelines, and work with deep learning and mlops tooling in production.\n\nResponsibilities\n• Design evaluation sets and define acceptance criteria for probabilistic behaviour.\n• Deploy models behind APIs with monitoring and observability.\n• Partner with product on data engineering and risk trade-offs.\n\nRequirements\n• 2-4 years in software engineering or machine learning.\n• Bachelor's degree in computer science or a quantitative field.\n• Strong Python and SQL; experience with AWS or GCP.\n• Experience with MLOps and model deployment."
+}

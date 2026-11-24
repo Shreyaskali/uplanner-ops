@@ -22,16 +22,23 @@ func requirementChecks(lower string, p profile.Profile) []Check {
 		if p.Years == 0 {
 			years = 2 // neutral default when the user has not recorded years
 		}
+		// JS renders the range as "1–3" or the floor as "15+".
+		requested := m[1]
+		if len(m) > 2 && m[2] != "" {
+			requested = m[1] + "–" + m[2]
+		} else {
+			requested = m[1] + "+"
+		}
 		status, weight, detail := "met", 1, ""
 		switch {
 		case min <= years:
-			detail = atoiOr(m[1], "0") + " years requested; your recorded experience covers this band."
+			detail = requested + " years requested; your experience covers the early-career band (about " + itoa(years) + " years)."
 		case min <= years+2:
 			status, weight = "partial", -2
-			detail = "More years requested than recorded; frame ownership and delivery as equivalent scope, but expect a tenure screen."
+			detail = requested + " years requested; frame your experience as equivalent scope, but expect a screen on tenure."
 		default:
 			status, weight = "gap", -7
-			detail = "More years requested than recorded. This is a seniority gap, not a wording problem."
+			detail = requested + " years requested; your profile has about " + itoa(years) + " years. This is a seniority gap, not a wording problem."
 		}
 		checks = append(checks, check("Experience", status, detail, weight))
 	}
@@ -39,23 +46,23 @@ func requirementChecks(lower string, p profile.Profile) []Check {
 	if re(`\bph\.?d\b|\bdoctorate\b`).MatchString(lower) {
 		checks = append(checks, check("Doctorate", "gap", "A doctorate is requested and is not recorded in your profile.", -9))
 	} else if re(`\bmba\b|\bmaster'?s?\b|\bmasters\b|\bmsc\b|\bpgdm?\b`).MatchString(lower) {
-		checks = append(checks, check("Postgraduate degree", "partial", "A master's or MBA is requested. Your planned degree route is not a credential held today.", -3))
+		checks = append(checks, check("Postgraduate degree", "partial", "A master’s or MBA is requested. Your 2027 application is the route to meet it, not a credential you hold today.", -3))
 	} else if re(`\bbachelor'?s?\b|\bundergraduate degree\b|\bdegree\b`).MatchString(lower) {
-		checks = append(checks, check("Degree", "met", "Your recorded degree meets the stated undergraduate requirement.", 0))
+		checks = append(checks, check("Degree", "met", "Your degree meets the stated undergraduate requirement.", 1))
 	}
 
 	if re(`\bsql\b`).MatchString(lower) {
 		strong := hasField(p, "computer", "data", "statistics", "analytics", "information technology", "software", "engineering")
 		if strong {
-			checks = append(checks, check("SQL", "met", "Your field of study covers database work; be ready to show a query.", 1))
+			checks = append(checks, check("SQL", "met", "Your field of study covers database work; be ready to show a query or dashboard example.", 1))
 		} else {
-			checks = append(checks, check("SQL", "partial", "SQL is not evidenced by your recorded field. Bring one working example.", -2))
+			checks = append(checks, check("SQL", "partial", "SQL is not shown by your profile yet. Bring one working example to the conversation.", -2))
 		}
 	}
 	if re(`\bpython\b`).MatchString(lower) {
 		strong := hasField(p, "computer", "data", "statistics", "analytics", "artificial intelligence", "machine learning")
 		if strong {
-			checks = append(checks, check("Python", "partial", "Your field is relevant, but no production Python project is recorded. Bring one.", -2))
+			checks = append(checks, check("Python", "partial", "Your field is relevant, but the profile does not show a production Python project. Bring one.", -2))
 		} else {
 			checks = append(checks, check("Python", "gap", "Python is not evidenced by your profile. Treat this as a real gap.", -7))
 		}
@@ -69,7 +76,7 @@ func requirementChecks(lower string, p profile.Profile) []Check {
 		if strong {
 			checks = append(checks, check("Cloud platforms", "met", "Your field or role covers cloud work directly.", 1))
 		} else {
-			checks = append(checks, check("Cloud platforms", "partial", "Cloud work is not recorded yet. Name the closest platform you have touched.", -2))
+			checks = append(checks, check("Cloud platforms", "partial", "Cloud work is not shown by your profile yet. Name the closest platform you have touched.", -2))
 		}
 	}
 	if re(`\b(tableau|power bi|looker)\b`).MatchString(lower) {
@@ -78,7 +85,7 @@ func requirementChecks(lower string, p profile.Profile) []Check {
 	if re(`\b(machine learning|artificial intelligence|generative ai|llm|mlops)\b`).MatchString(lower) {
 		strong := hasField(p, "artificial intelligence", "machine learning", "data", "statistics", "computer")
 		if strong {
-			checks = append(checks, check("AI / ML", "partial", "Your background is adjacent to AI work, but model building is not evidenced.", -3))
+			checks = append(checks, check("AI / ML", "partial", "Your background is adjacent to AI work, but model building is not yet evidenced. Distinguish coursework from deployment.", -3))
 		} else {
 			checks = append(checks, check("AI / ML", "gap", "AI is not evidenced by your profile. This is a genuine gap for this posting.", -7))
 		}
@@ -89,7 +96,7 @@ func requirementChecks(lower string, p profile.Profile) []Check {
 		if preferred {
 			checks = append(checks, check("CFA", "partial", "CFA is preferred rather than mandatory; note progress if started.", -2))
 		} else {
-			checks = append(checks, check("CFA", "gap", "CFA is requested and is not recorded. This is a hard screen for many finance roles.", -8))
+			checks = append(checks, check("CFA", "gap", "CFA is requested and the profile does not show it. This is a hard screen for many finance roles.", -8))
 		}
 	}
 	if re(`\b(cpa|acca|chartered accountant)\b`).MatchString(lower) {
@@ -110,12 +117,19 @@ func requirementChecks(lower string, p profile.Profile) []Check {
 		if domestic {
 			checks = append(checks, check("Work authorisation", "note", "The posting names a domestic or remote setup. Confirm the exact right-to-work wording.", 0))
 		} else {
-			checks = append(checks, check("Work authorisation", "gap", "The posting asks for existing authorisation. From India this likely needs sponsorship or a local permit.", -8))
+			checks = append(checks, check("Work authorisation", "gap", "The posting asks for existing work authorisation. From India you would likely need sponsorship or a local permit.", -8))
 		}
 	}
 
 	if re(`\b(director|vice president|vp|head of|principal|staff engineer|senior manager|general manager)\b`).MatchString(lower) {
-		checks = append(checks, check("Seniority", "gap", "The title is above the early-career band this profile supports.", -6))
+		checks = append(checks, check("Seniority", "gap", "The title uses “director” language, which is above the early-career band this profile currently supports.", -6))
+	} else if re(`\bsenior\b`).MatchString(lower) && re(`\b(\d{1,2})\s*(?:\+|plus)?\s*(?:years?|yrs?)\b`).MatchString(lower) {
+		// JS adds a middle branch: "senior" plus 4+ years is partial, but a
+		// lower number (e.g. "senior stakeholders" in a 1-3 year role) adds
+		// nothing at all — it must not fall through to the early-career "met".
+		if m := re(`\b(\d{1,2})\s*(?:\+|plus)?\s*(?:years?|yrs?)\b`).FindStringSubmatch(lower); len(m) > 1 && atoi(m[1]) >= 4 {
+			checks = append(checks, check("Seniority", "partial", "The role asks for a senior level above a first post-degree move.", -3))
+		}
 	} else if re(`\b(entry level|entry-level|graduate|junior|associate|analyst)\b`).MatchString(lower) {
 		checks = append(checks, check("Seniority", "met", "The language is early-career or analyst-level, which fits the profile's stage.", 0))
 	}
@@ -164,4 +178,16 @@ func atoiOr(s, fallback string) string {
 		return fallback
 	}
 	return s
+}
+
+func itoa(n int) string {
+	if n == 0 {
+		return "0"
+	}
+	digits := []byte{}
+	for n > 0 {
+		digits = append([]byte{byte('0' + n%10)}, digits...)
+		n /= 10
+	}
+	return string(digits)
 }
