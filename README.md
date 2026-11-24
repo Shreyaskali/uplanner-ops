@@ -22,7 +22,19 @@ system-layer-only self-update are included.
 
 ## Install
 
-Requires Go 1.25+.
+Prebuilt binaries for macOS, Linux and Windows are on the
+[Releases page](https://github.com/Shreyaskali/uplanner-ops/releases).
+
+```bash
+# macOS / Linux
+curl -L https://github.com/Shreyaskali/uplanner-ops/releases/latest/download/uplanner_1.0.0_darwin_arm64.tar.gz | tar xz
+./uplanner doctor
+
+# Or with Go 1.25+
+go install github.com/shreyaskali/uplanner-ops/cmd/uplanner@latest
+```
+
+From source:
 
 ```bash
 git clone https://github.com/shreyaskali/uplanner-ops.git

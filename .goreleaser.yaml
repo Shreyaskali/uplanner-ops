@@ -1,0 +1,59 @@
+# GoReleaser: build cross-platform binaries and publish GitHub Releases.
+# Tag with `v1.0.0` to release. See .github/workflows/release.yml.
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: uplanner
+    main: ./cmd/uplanner
+    binary: uplanner
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+
+archives:
+  - id: uplanner
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    files:
+      - README.md
+      - LICENSE
+      - AGENTS.md
+      - SKILL.md
+      - content/uplanner.json
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+
+release:
+  github:
+    owner: Shreyaskali
+    name: uplanner-ops
+  draft: false
+  prerelease: auto
