@@ -27,7 +27,7 @@ Prebuilt binaries for macOS, Linux and Windows are on the
 
 ```bash
 # macOS / Linux
-curl -L https://github.com/Shreyaskali/uplanner-ops/releases/latest/download/uplanner_1.0.0_darwin_arm64.tar.gz | tar xz
+curl -L https://github.com/Shreyaskali/uplanner-ops/releases/latest/download/uplanner-ops_1.0.0_darwin_arm64.tar.gz | tar xz
 ./uplanner doctor
 
 # Or with Go 1.25+
